@@ -10,10 +10,6 @@ def seacher_data(n,id):
 def generate_data(n=None,id=None,df=None):
     if isinstance(df, types.NoneType) == True:
         df= seacher_data(n,id)
-    freq = [df["property_type"].value_counts().iloc[x] for x in range(len(df["property_type"].unique()))]+[
-            df["room_type"].value_counts().iloc[x] for x in range(len(df["room_type"].unique()))]
+    freq = [df["property_type"].value_counts().iloc[x] for x in range(3)]+[
+            df["room_type"].value_counts().iloc[x] for x in range(4)]
     return freq
-df = seacher_data(20,1)
-df.to_json(path_or_buf="./dataset/test_data.json",orient="records")
-df = seacher_data(20,2)
-df.to_json(path_or_buf="./dataset/test_data2.json",orient="records")
