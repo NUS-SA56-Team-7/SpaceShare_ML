@@ -33,8 +33,6 @@ def multipleclustering():
     try:
         user_data = request.form.get("userData") or request.args.get("userData")
         user_data = json.loads(user_data)
-        
-
     except:
         return "Bad Request",400
     df = pd.json_normalize(user_data)
