@@ -10,6 +10,12 @@ def seacher_data(n,id):
 def generate_data(n=None,id=None,df=None):
     if isinstance(df, types.NoneType) == True:
         df= seacher_data(n,id)
-    freq = [df["property_type"].value_counts().iloc[x] for x in range(3)]+[
-            df["room_type"].value_counts().iloc[x] for x in range(4)]
-    return freq
+    property_type = [0]*3
+    room_type = [0]*4
+    for x in np.unique(df["property_type"].values):
+        property_type[x] = df["property_type"].value_counts()[x]
+    for x in np.unique(df["room_type"].values):
+        room_type[x] = df["room_type"].value_counts()[x]
+    return property_type+room_type
+test = generate_data(1,1)
+print(test)
