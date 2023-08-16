@@ -38,7 +38,7 @@ def multipleclustering():
     df = pd.json_normalize(user_data)
     features = [gd.generate_data(df=df[df["id"]==id])for id in np.unique(df["id"].values)]
     features = scaler.transform(features)
-    return pd.DataFrame(model.predict(features)).to_json(orient="records")
+    return '{}'.format(','.join(str(x) for x in model.predict(features)))
 
         
 
