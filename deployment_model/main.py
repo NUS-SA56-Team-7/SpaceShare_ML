@@ -8,6 +8,10 @@ import pandas as pd
 from flask import Flask, jsonify, request
 from waitress import serve
 import json
+import time
+import atexit
+from apscheduler.schedulers.background import BackgroundScheduler
+
 with open("./models/cluster_model.pkl",mode="rb") as f:
     model = Pickle.load(f)
 with open("./models/cluster_encoder.pkl",mode="rb") as f:
@@ -50,11 +54,16 @@ def cache():
     df = gd.data_to_cluster(df_history,label)
     df.to_csv("./dataset/cluster_data.csv")
     return "Success", 200
-@app.route("/api/analytics/refresh")
 def refresh():
+    print("TEST")
     #response = requests.post()
-    #property_json = json.loads(response)
-    #property_df = pd.json_normalize(property_json)
+    #property_json = json.loads(response.json())
+    #df_property = pd.json_normalize(property_json)
+    #response.close()
+    #response = requests.post()
+    #history_json = json.loads(response.json())
+    #df_history = pd.json_normalize(property_json)
+    #response.close()
     #to reload the memory of new df
     pass
 @app.route("/api/analytics/retrain")
@@ -63,4 +72,8 @@ def retrain():
     #model.fit(new data)
     #save model in pickle
     pass
+scheduler = BackgroundScheduler()
+scheduler.add_job(func=refresh,trigger="interval",hours=1)
+scheduler.add_job(func=cache,trigger="interval",hours=1)
+scheduler.start()
 serve(app)
