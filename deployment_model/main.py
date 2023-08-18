@@ -18,12 +18,14 @@ with open("./models/cluster_encoder.pkl",mode="rb") as f:
     encoder = Pickle.load(f)
 with open("./models/pca.pkl",mode= "rb") as f:
     scalar = Pickle.load(f)
+#production replace them with empty df
 df_history = pd.read_csv("./dataset/mock_data.csv",index_col=0)
 df_property = pd.read_csv("./dataset/mock_property.csv",index_col=0)
 #for loading of df from backend
 #response = requests.post()
-#property_json = json.loads(response)
+#property_json = json.loads(response.content)
 #property_df = pd.json_normalize(property_json)
+#can just call refresh instead
 df_cluster = pd.read_csv("./dataset/cluster_data.csv",index_col=0)
 app = Flask("__name__")
 
@@ -55,22 +57,15 @@ def cache():
     df.to_csv("./dataset/cluster_data.csv")
     return "Success", 200
 def refresh():
-    print("TEST")
     #response = requests.post()
-    #property_json = json.loads(response.json())
-    #df_property = pd.json_normalize(property_json)
+    #df_property = pd.json_normalize(response.json())
     #response.close()
+    #if the backend api does not join, we can join it here
     #response = requests.post()
-    #history_json = json.loads(response.json())
-    #df_history = pd.json_normalize(property_json)
+    #df_history = pd.json_normalize(response.json())
     #response.close()
     #to reload the memory of new df
-    pass
-@app.route("/api/analytics/retrain")
-def retrain():
-    refresh()
-    #model.fit(new data)
-    #save model in pickle
+
     pass
 scheduler = BackgroundScheduler()
 scheduler.add_job(func=refresh,trigger="interval",hours=1)
