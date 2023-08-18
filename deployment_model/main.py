@@ -33,6 +33,7 @@ app = Flask("__name__")
 def clustering():
    refresh()
    id = request.form.get("id") or request.args.get("id")
+   #it will be better if we can just get all the information we need
    df = df_history[df_history["tenant_id"]==int(id)]
    df_list = gd.df_to_freq(df,id)
    df_list.pop(0)
