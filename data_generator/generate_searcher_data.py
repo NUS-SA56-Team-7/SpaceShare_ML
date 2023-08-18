@@ -14,16 +14,16 @@ ROOM_TYPE = ["SINGLE","MASTER","COMMON","WHOLE_UNIT"]
 PROPERTY_TYPE = ["HDB","CONDOMINIUM","LANDED"]
 def seacher_data(n,id):
     data = [[id,uuid.uuid1(),PROPERTY_TYPE[rd.randint(0,2)],ROOM_TYPE[rd.randint(0,3)]] for i in range(n)]
-    return pd.DataFrame(data=data,columns=["tenant_id","property_id","property_type","room_type"])
+    return pd.DataFrame(data=data,columns=["tenantId","propertyId","propertyType","roomType"])
 def generate_data(n=None,id=None,df=None):
     if isinstance(df, types.NoneType) == True:
         df= seacher_data(n,id)
     property_type = [0]*3
     room_type = [0]*4
-    for x in np.unique(df["property_type"].values):
-        property_type[x] = df["property_type"].value_counts()[x]
-    for x in np.unique(df["room_type"].values):
-        room_type[x] = df["room_type"].value_counts()[x]
+    for x in np.unique(df["propertyType"].values):
+        property_type[x] = df["propertyType"].value_counts()[x]
+    for x in np.unique(df["roomType"].values):
+        room_type[x] = df["roomType"].value_counts()[x]
     return property_type+room_type
 def df_to_freq(df,id,property_unique=[0,1,2],room_unique=[0,1,2,3]):
     freq_room = [0]*4
@@ -48,8 +48,8 @@ def data_to_cluster(df,label):
     for i in np.unique(df['tenant_id']):
         freqs.append(df_to_freq(df=df[df["tenant_id"]==i],id=i))
     df_freq=pd.DataFrame(data=freqs,
-                        columns=["tenant_id","CONDOMINIUM","HDB","LANDED","COMMON","MASTER","SINGLE","WHOLE_UNIT"]
-                        ).set_index("tenant_id")
+                        columns=["tenantId","CONDOMINIUM","HDB","LANDED","COMMON","MASTER","SINGLE","WHOLE_UNIT"]
+                        ).set_index("tenantId")
     datas = [list(x) for x in zip(df_freq.index.tolist(),label)]
     return pd.DataFrame(data=datas,columns=["id","cluster"])
 
@@ -60,7 +60,7 @@ def main():
         dfs.append(df)
     df_final = pd.concat(dfs,ignore_index=True)
     df_final.to_csv("./dataset/mock_data.csv")
-    df_property_list = df_final[["property_id","property_type","room_type"]]
+    df_property_list = df_final[["propertyId","propertyIype","roomType"]]
     df_property_list.to_csv("./dataset/mock_property.csv")
     encoder = OrdinalEncoder()
     df_property_list[["property_type","room_type"]] = encoder.fit_transform(df_property_list[["property_type","room_type"]])
